@@ -1,0 +1,20 @@
+version: '3.9'
+services:
+  rag_service:
+    build: ./rag_service
+    ports:
+      - '8000:8000'
+  user_service:
+    build: ./user_service
+    ports:
+      - '3000:3000'
+    depends_on:
+      - rag_service
+  frontend:
+    build: ./frontend
+    ports:
+      - '4200:80'
+    depends_on:
+      - user_service
+    environment:
+      - API_URL=http://user_service:3000
